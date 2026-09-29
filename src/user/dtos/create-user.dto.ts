@@ -10,6 +10,7 @@ import {
   Matches,
   IsStrongPassword,
 } from 'class-validator';
+
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
