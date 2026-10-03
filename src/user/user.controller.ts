@@ -7,14 +7,14 @@ import {
   DefaultValuePipe,
   Post,
   Body,
-  ValidationPipe
+  Logger
 } from '@nestjs/common';
 import {ApiParam, ApiQuery, ApiResponse} from '@nestjs/swagger'
 import {CreateUserDto} from './dtos/create-user.dto'
 import {UserService} from './providers/user.service'
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService:UserService){}
+  constructor(private readonly userService:UserService,private readonly logger:Logger){}
   //{/:id}
   @ApiParam({
     name:'id',
@@ -44,9 +44,7 @@ export class UserController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
     limit: number ,
   ): string {
-    console.log(`id is :${id}`);
-    console.log(`page is: ${page}`);
-    console.log(`limit is :${limit}`);
+    this.logger.log(`userid:${id} | page:${page} | limit:${limit}`,'UserController')
     return this.userService.findAll(id,page,limit)
   }
 
