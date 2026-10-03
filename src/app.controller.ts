@@ -10,7 +10,7 @@ export class AppController {
     status: 200, 
     description: 'Service is healthy'
   })
-  getHealth():{message:string,statusCode:number}{
+  getHealth():{message:string,status:string}{
     return this.appService.getHealth()
   }
 }
