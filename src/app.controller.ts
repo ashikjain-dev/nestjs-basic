@@ -7,10 +7,10 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
   @Get('/health')
   @ApiResponse({
-    status: 200, 
-    description: 'Service is healthy'
+    status: 200,
+    description: 'Service is healthy',
   })
-  getHealth():{message:string,status:string}{
-    return this.appService.getHealth()
+  getHealth(): { message: string; status: string } {
+    return this.appService.getHealth();
   }
 }

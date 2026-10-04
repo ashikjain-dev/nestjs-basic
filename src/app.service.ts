@@ -5,10 +5,10 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-  getHealth():{message:string,status:string}{
+  getHealth(): { message: string; status: string } {
     return {
-      message:'service is running',
-      status:'ok'
-    }
+      message: 'service is running',
+      status: 'ok',
+    };
   }
 }
