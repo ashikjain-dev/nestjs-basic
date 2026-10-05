@@ -7,6 +7,8 @@ import { PostModule } from './post/post.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpLoggerMiddleware } from './middlewares/http-logger.middleware';
 import { User } from './user/user.entity';
+import {Post} from './post/post.entity'
+
 @Module({
   imports: [
     UserModule,
@@ -24,9 +26,10 @@ import { User } from './user/user.entity';
         password: 'password1',
         database: 'db',
         synchronize: true,
-        entities: [User],
+        entities: [User,Post],
       }),
     }),
+    
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

@@ -1,10 +1,11 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Body, Param, ParseIntPipe, Post, Logger } from '@nestjs/common';
 import { PostService } from './providers/post.service';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { CreatePostDto } from './dtos/create-post.dto';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(private readonly postService: PostService,private readonly logger:Logger) {}
   @Get('/:userId')
   @ApiOperation({
     description: 'Get the required author posts',
@@ -22,5 +23,17 @@ export class PostController {
   public getPosts(@Param('userId', new ParseIntPipe()) userId: number): string {
     console.log(userId);
     return this.postService.findAll(userId);
+  }
+  @ApiOperation({
+    summary: 'create a new post',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'post create successfully',
+  })
+  @Post()
+  public createPost(@Body() body: CreatePostDto) {
+    this.logger.log(body,'PostController')
+    return this.postService.createPost(body);
   }
 }
