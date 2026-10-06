@@ -95,9 +95,7 @@ export class CreatePostDto {
 }
 
 export class MetaOptionsDto{
-  @IsString()
   @IsNotEmpty()
-  key!:string
-  @IsNotEmpty()
-  value!:number|string|boolean
+  @IsJSON()
+  metaValue!:string
 }
