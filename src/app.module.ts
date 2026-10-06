@@ -18,6 +18,7 @@ import {MetaOption} from './metaoption/metaoption.entity'
     PostModule,
     AuthModule,
   //  TagModule,
+   MetaoptionModule,
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
@@ -33,7 +34,7 @@ import {MetaOption} from './metaoption/metaoption.entity'
         entities: [User,Post,Tag,MetaOption],
       }),
     }),
-   // MetaoptionModule,
+   
     
     
   ],

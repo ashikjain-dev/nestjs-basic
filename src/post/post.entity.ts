@@ -1,6 +1,7 @@
-import { Entity,Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Entity,Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import {PostType,Status}from './enums/post.enum'
 import { MetaOptionsDto } from './dtos/create-post.dto';
+import { MetaOption } from '../metaoption/metaoption.entity';
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
@@ -63,7 +64,9 @@ export class Post {
     type: 'simple-array',
     nullable: true,
   })
-  metaOptions?: Array<MetaOptionsDto>;
+  @OneToOne(()=>MetaOption)
+  @JoinColumn()
+  metaOptions?: MetaOption
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
     createdAt!: Date;
     @CreateDateColumn({

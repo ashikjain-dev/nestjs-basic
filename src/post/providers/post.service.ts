@@ -14,7 +14,7 @@ export class PostService {
     console.log(this.userService.findOneById(userId));
     return `A user all posts`;
   }
-  public async createPost(body: CreatePostDto) {
+  public async createPost(body: any) {
     let newPost=this.postRepository.create(body)
     newPost=await this.postRepository.save(newPost)
     return newPost;

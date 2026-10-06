@@ -95,6 +95,10 @@ export class CreatePostDto {
 }
 
 export class MetaOptionsDto{
+  @ApiProperty({
+    description:"add a key value pair",
+    example:"{\"key\":\"isEmail\",\"value\":\"false\"}"
+  })
   @IsNotEmpty()
   @IsJSON()
   metaValue!:string
