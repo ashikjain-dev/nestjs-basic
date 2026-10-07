@@ -8,17 +8,13 @@ import { AuthModule } from './auth/auth.module';
 import { HttpLoggerMiddleware } from './middlewares/http-logger.middleware';
 import { User } from './user/user.entity';
 import {Post} from './post/post.entity'
-import { TagModule } from './tag/tag.module';
-import { MetaoptionModule } from './metaoption/metaoption.module';
-import { Tag } from './tag/tag.entity';
-import {MetaOption} from './metaoption/metaoption.entity'
+
 @Module({
   imports: [
     UserModule,
     PostModule,
     AuthModule,
-  //  TagModule,
-   MetaoptionModule,
+  
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
@@ -31,7 +27,7 @@ import {MetaOption} from './metaoption/metaoption.entity'
         password: 'password1',
         database: 'db',
         synchronize: true,
-        entities: [User,Post,Tag,MetaOption],
+        entities: [User,Post],
       }),
     }),
    

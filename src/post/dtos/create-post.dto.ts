@@ -14,6 +14,17 @@ import {
 import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
 import { PostType, Status } from '../enums/post.enum';
 import { Type } from 'class-transformer';
+
+export class MetaOptionsDto{
+  @ApiProperty({
+    description:"add a key value pair",
+    example:"{\"key\":\"isEmail\",\"value\":\"false\"}"
+  })
+  @IsNotEmpty()
+  @IsJSON()
+  metaValue!:string
+}
+
 export class CreatePostDto {
   @ApiProperty({
     example: 'My First Blog Post',
@@ -84,22 +95,12 @@ export class CreatePostDto {
   tags?: string[];
 
   @ApiPropertyOptional({
-    example: [{ key: 'seo_title', value: 'SEO Title' }],
-    type: [Object],
+    type:Object,
+    example:'{"sidebar":true}',
+    description:"A metavalue is a JSON string"
   })
   @IsOptional()
-  @IsArray()
-  @ValidateNested({each:true})
+  @ValidateNested()
   @Type(()=>MetaOptionsDto)
-  metaOptions?: Array<MetaOptionsDto>
-}
-
-export class MetaOptionsDto{
-  @ApiProperty({
-    description:"add a key value pair",
-    example:"{\"key\":\"isEmail\",\"value\":\"false\"}"
-  })
-  @IsNotEmpty()
-  @IsJSON()
-  metaValue!:string
+  metaOptions?: MetaOptionsDto
 }
