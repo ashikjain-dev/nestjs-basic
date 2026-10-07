@@ -1,4 +1,4 @@
-import { Entity,Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity,Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import {PostType,Status}from './enums/post.enum'
 import { MetaOptionsDto } from './dtos/create-post.dto';
 @Entity()
