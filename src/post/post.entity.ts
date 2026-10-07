@@ -60,7 +60,7 @@ export class Post {
   })
   tags?: string[];
   @Column({
-    type: 'simple-array',
+    type: "json",
     nullable: true,
   })
   metaOptions?: MetaOptionsDto
