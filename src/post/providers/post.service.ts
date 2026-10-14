@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { UserService } from '../../user/providers/user.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { Repository } from 'typeorm';
@@ -18,7 +18,11 @@ export class PostService {
     return `A user all posts`;
   }
   public async createPost(body: CreatePostDto) {
-    let newPost=this.postRepository.create(body)
+    const user=await this.userService.findOneById(body.authorId)
+    if(!user){
+      throw new BadRequestException(`No user found with the id: ${body.authorId}`)
+    }
+    let newPost=this.postRepository.create({...body,author:user})
     newPost=await this.postRepository.save(newPost)
     return newPost;
   

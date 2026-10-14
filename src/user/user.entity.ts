@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Post } from '../post/post.entity';
 
 @Entity()
 export class User {
@@ -36,6 +38,9 @@ export class User {
     nullable: false,
   })
   password!: string;
+
+  @OneToOne(()=>Post,(post)=>post.author)
+  post!:Post[];
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;

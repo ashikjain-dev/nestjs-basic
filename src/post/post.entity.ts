@@ -1,6 +1,7 @@
-import { Entity,Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Entity,Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
 import {PostType,Status}from './enums/post.enum'
 import { MetaOptionsDto } from './dtos/create-post.dto';
+import { User } from '../user/user.entity';
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
@@ -64,6 +65,10 @@ export class Post {
     nullable: true,
   })
   metaOptions?: MetaOptionsDto
+
+  @ManyToOne(()=>User,(user)=>user.post)
+  author!:User;
+
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
     createdAt!: Date;
     @CreateDateColumn({

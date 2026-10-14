@@ -26,12 +26,8 @@ export class UserService {
     }
     return `${id}:information`;
   }
-  public findOneById(id: number) {
-    return {
-      id: 123,
-      firstName: 'Ashik',
-      email: 'ashikjain44@gmail.com',
-    };
+  public async findOneById(id: number) {
+    return await this.userRepository.findOne({where:{id}})
   }
 
   public async createUser(createUserdto: CreateUserDto) {
