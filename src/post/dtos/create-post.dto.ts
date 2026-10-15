@@ -16,22 +16,18 @@ import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
 import { PostType, Status } from '../enums/post.enum';
 import { Type } from 'class-transformer';
 
- export class MetaOptionsDto{
+export class MetaOptionsDto {
   @ApiProperty({ description: 'The metadata key name', example: 'theme' })
   @IsNotEmpty()
   @IsString()
-  key!:string;
+  key!: string;
   @ApiProperty({
     description: 'The value can be a string, number, or boolean',
-    oneOf: [
-      { type: 'string' },
-      { type: 'number' },
-      { type: 'boolean' },
-    ],
+    oneOf: [{ type: 'string' }, { type: 'number' }, { type: 'boolean' }],
     example: 'dark',
   })
   @IsNotEmpty()
-  value!:string|number|boolean
+  value!: string | number | boolean;
 }
 
 export class CreatePostDto {
@@ -58,7 +54,7 @@ export class CreatePostDto {
   })
   @IsString()
   @MaxLength(256)
-  @IsNotEmpty() 
+  @IsNotEmpty()
   slug!: string;
   @ApiProperty({
     enum: Status,
@@ -99,8 +95,8 @@ export class CreatePostDto {
   })
   @IsArray()
   @IsOptional()
-  @IsString({each:true})
-  @MinLength(3,{each:true})
+  @IsString({ each: true })
+  @MinLength(3, { each: true })
   tags?: string[];
 
   @ApiPropertyOptional({
@@ -109,16 +105,16 @@ export class CreatePostDto {
   })
   @IsOptional()
   @ValidateNested()
-  @Type(()=>MetaOptionsDto)
-  metaOptions?: MetaOptionsDto
+  @Type(() => MetaOptionsDto)
+  metaOptions?: MetaOptionsDto;
 
   @ApiProperty({
-    type:"number",
-    description:'ID of an author who wants to create it',
-    example:1,
-    required:true
+    type: 'number',
+    description: 'ID of an author who wants to create it',
+    example: 1,
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
-  authorId!:number;
+  authorId!: number;
 }

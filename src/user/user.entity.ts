@@ -39,8 +39,8 @@ export class User {
   })
   password!: string;
 
-  @OneToOne(()=>Post,(post)=>post.author)
-  post!:Post[];
+  @OneToOne(() => Post, (post) => post.author)
+  post!: Post[];
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;

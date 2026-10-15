@@ -11,10 +11,10 @@ import {
 
 export class CreateUserDto {
   @ApiProperty({
-    type:"string",
-    required:true,
-    description:'First name of an user',
-    example:"Aman"
+    type: 'string',
+    required: true,
+    description: 'First name of an user',
+    example: 'Aman',
   })
   @IsString()
   @IsNotEmpty()
@@ -22,10 +22,10 @@ export class CreateUserDto {
   @MaxLength(50)
   firstName!: string;
   @ApiPropertyOptional({
-    type:"string",
-    required:false,
-    description:'Second name of an user',
-    example:"Khan"
+    type: 'string',
+    required: false,
+    description: 'Second name of an user',
+    example: 'Khan',
   })
   @IsString()
   @IsOptional()
@@ -33,20 +33,20 @@ export class CreateUserDto {
   @MaxLength(50)
   lastName?: string;
   @ApiProperty({
-    type:"string",
-    required:true,
-    description:'Email of an user',
-    example:"Aman@khan.com"
+    type: 'string',
+    required: true,
+    description: 'Email of an user',
+    example: 'Aman@khan.com',
   })
   @IsString()
   @IsNotEmpty()
   @IsEmail()
   email!: string;
   @ApiProperty({
-    type:"string",
-    required:true,
-    description:'Password of an user',
-    example:"Aman@khan@123"
+    type: 'string',
+    required: true,
+    description: 'Password of an user',
+    example: 'Aman@khan@123',
   })
   @IsString()
   @IsNotEmpty()

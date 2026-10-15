@@ -1,5 +1,11 @@
-import { Entity,Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
-import {PostType,Status}from './enums/post.enum'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+} from 'typeorm';
+import { PostType, Status } from './enums/post.enum';
 import { MetaOptionsDto } from './dtos/create-post.dto';
 import { User } from '../user/user.entity';
 @Entity()
@@ -8,30 +14,30 @@ export class Post {
   id!: number;
   @Column({
     type: 'varchar',
-    length:512,
+    length: 512,
     nullable: false,
   })
   title!: string;
   @Column({
     type: 'enum',
-    enum:PostType,
-    nullable:false,
-    default:'post',
+    enum: PostType,
+    nullable: false,
+    default: 'post',
     enumName: 'posttype_enum',
   })
   postType!: PostType;
   @Column({
     type: 'varchar',
-    length:256,
+    length: 256,
     nullable: false,
-    unique:true
+    unique: true,
   })
   slug!: string;
   @Column({
     type: 'enum',
-    enum:Status,
-    nullable:false,
-    default:'draft',
+    enum: Status,
+    nullable: false,
+    default: 'draft',
   })
   status!: Status;
   @Column({
@@ -46,7 +52,7 @@ export class Post {
   schema?: string;
   @Column({
     type: 'varchar',
-    length:1024,
+    length: 1024,
     nullable: true,
   })
   featuredImageUrl?: string;
@@ -61,20 +67,20 @@ export class Post {
   })
   tags?: string[];
   @Column({
-    type: "json",
+    type: 'json',
     nullable: true,
   })
-  metaOptions?: MetaOptionsDto
+  metaOptions?: MetaOptionsDto;
 
-  @ManyToOne(()=>User,(user)=>user.post)
-  author!:User;
+  @ManyToOne(() => User, (user) => user.post)
+  author!: User;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-    createdAt!: Date;
-    @CreateDateColumn({
-      type: 'timestamptz',
-      default: () => 'CURRENT_TIMESTAMP',
-      onUpdate: 'CURRENT_TIMESTAMP',
-    })
-    updatedAt!: Date;
+  createdAt!: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt!: Date;
 }

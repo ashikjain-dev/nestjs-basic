@@ -7,14 +7,16 @@ import { PostModule } from './post/post.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpLoggerMiddleware } from './middlewares/http-logger.middleware';
 import { User } from './user/user.entity';
-import {Post} from './post/post.entity'
+import { Post } from './post/post.entity';
+import { TagModule } from './tag/tag.module';
+import { Tag } from './tag/tag.entity';
 
 @Module({
   imports: [
     UserModule,
     PostModule,
     AuthModule,
-  
+    TagModule,
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
@@ -27,12 +29,9 @@ import {Post} from './post/post.entity'
         password: 'password1',
         database: 'db',
         synchronize: true,
-        entities: [User,Post],
+        entities: [User, Post, Tag],
       }),
     }),
-   
-    
-    
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
