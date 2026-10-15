@@ -9,22 +9,21 @@ export class PostController {
   constructor(private readonly postService: PostService) {
     this.logger=new Logger('PostController')
   }
-  @Get('/:userId')
+  @Get('{/:userId}')
   @ApiOperation({
     description: 'Get the required author posts',
   })
   @ApiParam({
     name: 'userId',
     description: 'User id required',
-    required: true,
+    required: false ,
     example: 1,
   })
   @ApiResponse({
     status: 200,
     description: 'required author posts are fetched successfully',
   })
-  public getPosts(@Param('userId', new ParseIntPipe()) userId: number): string {
-    console.log(userId);
+  public getPosts(@Param('userId', new ParseIntPipe({optional:true})) userId: number|undefined) {
     return this.postService.findAll(userId);
   }
   @ApiOperation({

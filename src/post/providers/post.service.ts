@@ -13,9 +13,11 @@ export class PostService {
   ) {
     this.logger=new Logger('PostService')
   }
-  public findAll(userId: number): string {
-    console.log(this.userService.findOneById(userId));
-    return `A user all posts`;
+  public async findAll(userId: number|undefined) {
+    return await this.postRepository.find({relations:{
+      author:true
+    }})
+    
   }
   public async createPost(body: CreatePostDto) {
     const user=await this.userService.findOneById(body.authorId)
