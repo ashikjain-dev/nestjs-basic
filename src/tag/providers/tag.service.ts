@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateTagDto } from '../dtos/create-tag.dto';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Tag } from '../tag.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -32,6 +32,12 @@ export class TagService {
       skip: skip,
       take: limit,
     });
+  }
+  public async findMultipleTagsById(tagids:number[]){
+    if(tagids.length<=0){
+      throw new NotFoundException('Tag id array should not be empty')
+    }
+    return await this.tagRepository.find({where:{id:In(tagids)}})
   }
   public async deleteByID(id: number) {
     let tag = await this.tagRepository.delete(id);

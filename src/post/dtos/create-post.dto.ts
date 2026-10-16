@@ -90,14 +90,14 @@ export class CreatePostDto {
   @IsOptional()
   publishOn?: Date;
   @ApiPropertyOptional({
-    example: ['nestjs', 'typescript', 'swagger'],
-    type: [String],
+    description:'Array of tags id',
+    example: [1,2,3],
+    type: [Number],
   })
   @IsArray()
   @IsOptional()
-  @IsString({ each: true })
-  @MinLength(3, { each: true })
-  tags?: string[];
+  @IsInt({ each: true })
+  tags?: number[];
 
   @ApiPropertyOptional({
     description: 'A single key-value metadata option',

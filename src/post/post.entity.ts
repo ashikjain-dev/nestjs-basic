@@ -4,10 +4,14 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
+  ManyToMany,
+  JoinColumn,
+  JoinTable,
 } from 'typeorm';
 import { PostType, Status } from './enums/post.enum';
 import { MetaOptionsDto } from './dtos/create-post.dto';
 import { User } from '../user/user.entity';
+import { Tag } from '../tag/tag.entity';
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
@@ -61,11 +65,10 @@ export class Post {
     nullable: true,
   })
   publishOn?: Date;
-  @Column({
-    type: 'simple-array',
-    nullable: true,
-  })
-  tags?: string[];
+  
+  @ManyToMany(()=>Tag,{eager:true})
+  @JoinTable()
+  tags?: Tag[];
   @Column({
     type: 'json',
     nullable: true,
