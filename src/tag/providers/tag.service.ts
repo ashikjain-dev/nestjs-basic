@@ -33,11 +33,11 @@ export class TagService {
       take: limit,
     });
   }
-  public async findMultipleTagsById(tagids:number[]){
-    if(tagids.length<=0){
-      throw new NotFoundException('Tag id array should not be empty')
+  public async findMultipleTagsById(tagids: number[]) {
+    if (tagids.length <= 0) {
+      throw new NotFoundException('Tag id array should not be empty');
     }
-    return await this.tagRepository.find({where:{id:In(tagids)}})
+    return await this.tagRepository.find({ where: { id: In(tagids) } });
   }
   public async deleteByID(id: number) {
     let tag = await this.tagRepository.delete(id);

@@ -16,36 +16,45 @@ export class PostService {
   private logger: Logger;
   constructor(
     private readonly userService: UserService,
-    private readonly tagService:TagService,
+    private readonly tagService: TagService,
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
   ) {
     this.logger = new Logger('PostService');
   }
   public async findAll(userId: number | undefined) {
-    if(userId){
-      const author=await this.userService.findOneById(userId);
-      if(!author){
-        throw new NotFoundException(`Couldn't find the author with the id:${userId}`)
+    if (userId) {
+      const author = await this.userService.findOneById(userId);
+      if (!author) {
+        throw new NotFoundException(
+          `Couldn't find the author with the id:${userId}`,
+        );
       }
       return author;
     }
     return await this.postRepository.find({
       relations: {
         author: true,
-        tags:true
+        tags: true,
       },
     });
   }
   public async createPost(body: CreatePostDto) {
-    const [user,tags]=await Promise.all([  this.userService.findOneById(body.authorId), this.tagService.findMultipleTagsById(body.tags||[])])
-    this.logger.log(tags)
+    const [user, tags] = await Promise.all([
+      this.userService.findOneById(body.authorId),
+      this.tagService.findMultipleTagsById(body.tags || []),
+    ]);
+    this.logger.log(tags);
     if (!user) {
       throw new BadRequestException(
         `No user found with the id: ${body.authorId}`,
       );
     }
-    let newPost = this.postRepository.create({ ...body, author: user,tags:tags });
+    let newPost = this.postRepository.create({
+      ...body,
+      author: user,
+      tags: tags,
+    });
     newPost = await this.postRepository.save(newPost);
     return newPost;
   }

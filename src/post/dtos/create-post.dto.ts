@@ -90,8 +90,8 @@ export class CreatePostDto {
   @IsOptional()
   publishOn?: Date;
   @ApiPropertyOptional({
-    description:'Array of tags id',
-    example: [1,2,3],
+    description: 'Array of tags id',
+    example: [1, 2, 3],
     type: [Number],
   })
   @IsArray()

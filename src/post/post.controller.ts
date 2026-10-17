@@ -37,7 +37,7 @@ export class PostController {
     @Param('userId', new ParseIntPipe({ optional: true }))
     userId: number | undefined,
   ) {
-    return this.postService.findAll(userId)
+    return this.postService.findAll(userId);
   }
   @ApiOperation({
     summary: 'create a new post',

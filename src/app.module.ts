@@ -10,6 +10,7 @@ import { User } from './user/user.entity';
 import { Post } from './post/post.entity';
 import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/tag.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,20 +18,31 @@ import { Tag } from './tag/tag.entity';
     PostModule,
     AuthModule,
     TagModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        process.env.NODE_ENV == 'development'
+          ? '.env.development'
+          : '.env.production',
+      ],
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
-      useFactory: () => ({
-        type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        logging: ['info', 'log', 'error', 'schema', 'warn'],
-        username: 'user1',
-        password: 'password1',
-        database: 'db',
-        synchronize: true,
-        entities: [User, Post, Tag],
-      }),
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        console.log(process.env.NODE_ENV);
+        return {
+          type: 'postgres',
+          host: configService.get<string>('DB_HOST'),
+          port: configService.get<number>('DB_PORT'),
+          logging: ['info', 'log', 'error', 'schema', 'warn'],
+          username: configService.get<string>('DB_USERNAME'),
+          password: configService.get<string>('DB_PASSWORD'),
+          database: configService.get<string>('DB_NAME') ?? 'db',
+          synchronize: configService.get<boolean>('DB_SYNCHRONIZE') ?? true,
+          entities: [User, Post, Tag],
+        };
+      },
     }),
   ],
   controllers: [AppController],
