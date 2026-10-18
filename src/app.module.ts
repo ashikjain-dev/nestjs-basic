@@ -1,4 +1,5 @@
 import { Module, Logger, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,8 +11,8 @@ import { User } from './user/user.entity';
 import { Post } from './post/post.entity';
 import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/tag.entity';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import Joi from './config/environment.validation' 
 @Module({
   imports: [
     UserModule,
@@ -25,12 +26,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           ? '.env.development'
           : '.env.production',
       ],
+      validationSchema:Joi
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        console.log(process.env.NODE_ENV);
+
         return {
           type: 'postgres',
           host: configService.get<string>('DB_HOST'),
