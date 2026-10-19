@@ -9,9 +9,10 @@ import {
   Body,
   Logger,
 } from '@nestjs/common';
-import { ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserService } from './providers/user.service';
+import { CreateManyUserDto } from './dtos/create-many-user.dto';
 @Controller('user')
 export class UserController {
   constructor(
@@ -54,8 +55,18 @@ export class UserController {
     return this.userService.findAll(id, page, limit);
   }
 
+  @ApiOperation({
+    summary: 'Create an user',
+  })
   @Post()
   public createUser(@Body() body: CreateUserDto) {
     return this.userService.createUser(body);
+  }
+  @ApiOperation({
+    summary: 'create multiple users at once',
+  })
+  @Post('/many/users')
+  public creatManyUsers(@Body() body: CreateManyUserDto) {
+    return this.userService.createMany(body);
   }
 }

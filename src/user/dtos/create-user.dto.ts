@@ -38,7 +38,6 @@ export class CreateUserDto {
     description: 'Email of an user',
     example: 'Aman@khan.com',
   })
-  @IsString()
   @IsNotEmpty()
   @IsEmail()
   email!: string;
