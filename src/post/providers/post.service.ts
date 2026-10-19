@@ -40,23 +40,28 @@ export class PostService {
     });
   }
   public async createPost(body: CreatePostDto) {
-    const [user, tags] = await Promise.all([
-      this.userService.findOneById(body.authorId),
-      this.tagService.findMultipleTagsById(body.tags || []),
-    ]);
-    this.logger.log(tags);
-    if (!user) {
-      throw new BadRequestException(
-        `No user found with the id: ${body.authorId}`,
-      );
+    try {
+      const [user, tags] = await Promise.all([
+        this.userService.findOneById(body.authorId),
+        this.tagService.findMultipleTagsById(body.tags || []),
+      ]);
+      this.logger.log(tags);
+      if (!user) {
+        throw new BadRequestException(
+          `No user found with the id: ${body.authorId}`,
+        );
+      }
+      let newPost = this.postRepository.create({
+        ...body,
+        author: user,
+        tags: tags,
+      });
+      newPost = await this.postRepository.save(newPost);
+      return newPost;
+    } catch (error) {
+      this.logger.error(`error while creating a post:${error}`);
+      throw new InternalServerErrorException(`Error while creating a post`);
     }
-    let newPost = this.postRepository.create({
-      ...body,
-      author: user,
-      tags: tags,
-    });
-    newPost = await this.postRepository.save(newPost);
-    return newPost;
   }
 
   public async deleteOne(id: number) {

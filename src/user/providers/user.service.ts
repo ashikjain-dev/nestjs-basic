@@ -1,9 +1,12 @@
 import {
   BadRequestException,
   forwardRef,
+  HttpException,
   Inject,
   Injectable,
   Logger,
+  NotFoundException,
+  RequestTimeoutException,
 } from '@nestjs/common';
 import { AuthService } from '../../auth/providers/auth.service';
 import { Repository } from 'typeorm';
@@ -27,30 +30,50 @@ export class UserService {
     return `${id}:information`;
   }
   public async findOneById(id: number) {
-    return await this.userRepository.findOne({
-      where: { id },
-      relations: { post: true },
-    });
+    let userFound: User | null = null;
+    try {
+      userFound = await this.userRepository.findOne({
+        where: { id },
+        relations: { post: true },
+      });
+    } catch (error) {
+      this.logger.error(`Not able to fetch the user detail:${error}`);
+      throw new RequestTimeoutException(
+        `Not able to fetch the user detail at the moment`,
+      );
+    }
+    if (userFound) {
+      return userFound;
+    }
+    throw new NotFoundException(`Not able to find the user with ID:${id}`);
   }
 
   public async createUser(createUserdto: CreateUserDto) {
-    const existinUser = await this.userRepository.findOne({
-      where: { email: createUserdto.email },
-    });
-    this.logger.log(
-      `Existing user details: ${JSON.stringify(existinUser)}`,
-      this.logName,
-    );
-    if (existinUser) {
-      this.logger.log(
-        `User found with the email :${createUserdto.email}`,
-        this.logName,
+    try {
+      let existinUser = await this.userRepository.findOne({
+        where: { email: createUserdto.email },
+      });
+      if (existinUser) {
+        this.logger.log(
+          `User found with the email :${createUserdto.email}`,
+          this.logName,
+        );
+        throw new BadRequestException(
+          `User already exist:${existinUser.email}`,
+        );
+      } else {
+        let newUser = this.userRepository.create(createUserdto);
+        newUser = await this.userRepository.save(newUser);
+        return newUser;
+      }
+    } catch (error) {
+      this.logger.error(`Error while creating a ${error}`);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new RequestTimeoutException(
+        `Unable to process your request at the moment`,
       );
-      throw new BadRequestException(`User already exist:${existinUser.email}`);
-    } else {
-      let newUser = this.userRepository.create(createUserdto);
-      newUser = await this.userRepository.save(newUser);
-      return newUser;
     }
   }
 }

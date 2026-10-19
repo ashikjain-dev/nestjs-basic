@@ -12,7 +12,7 @@ import { Post } from './post/post.entity';
 import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/tag.entity';
 
-import Joi from './config/environment.validation' 
+import Joi from './config/environment.validation';
 @Module({
   imports: [
     UserModule,
@@ -26,13 +26,12 @@ import Joi from './config/environment.validation'
           ? '.env.development'
           : '.env.production',
       ],
-      validationSchema:Joi
+      validationSchema: Joi,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-
         return {
           type: 'postgres',
           host: configService.get<string>('DB_HOST'),
