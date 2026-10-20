@@ -13,6 +13,8 @@ import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserService } from './providers/user.service';
 import { CreateManyUserDto } from './dtos/create-many-user.dto';
+import { PaginateInterface } from '../pagination/interfaces/paginate.interface';
+import { User } from './user.entity';
 @Controller('user')
 export class UserController {
   constructor(
@@ -47,7 +49,7 @@ export class UserController {
     page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
     limit: number,
-  ): string {
+  ):Promise<User|PaginateInterface<User>> {
     this.logger.log(
       `userid:${id} | page:${page} | limit:${limit}`,
       'UserController',

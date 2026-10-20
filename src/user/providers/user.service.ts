@@ -16,6 +16,8 @@ import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { CreateManyUserDto } from '../dtos/create-many-user.dto';
+import { PaginationService } from '../../pagination/providers/pagination.service';
+import { PaginateInterface } from '../../pagination/interfaces/paginate.interface';
 
 @Injectable()
 export class UserService {
@@ -23,15 +25,17 @@ export class UserService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    private readonly paginateService:PaginationService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
     private readonly logger: Logger,
   ) {}
-  public findAll(id: number | undefined, page: number, limit: number): string {
-    if (id === undefined) {
-      return `all users information`;
+  public findAll(id: number | undefined, page: number, limit: number): Promise<User|PaginateInterface<User>> {
+    if (id !== undefined) {
+      return this.findOneById(id)
     }
-    return `${id}:information`;
+
+    return this.paginateService.paginateQuery({page,limit},this.userRepository);
   }
   public async findOneById(id: number): Promise<User> {
     let userFound: User | null = null;
