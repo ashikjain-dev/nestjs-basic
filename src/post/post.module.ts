@@ -5,9 +5,15 @@ import { UserModule } from '../user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { TagModule } from '../tag/tag.module';
+import { PaginationModule } from '../pagination/pagination.module';
 
 @Module({
-  imports: [UserModule, TagModule, TypeOrmModule.forFeature([Post])],
+  imports: [
+    UserModule,
+    TagModule,
+    PaginationModule,
+    TypeOrmModule.forFeature([Post]),
+  ],
   controllers: [PostController],
   providers: [PostService, Logger],
 })

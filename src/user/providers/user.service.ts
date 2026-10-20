@@ -33,7 +33,7 @@ export class UserService {
     }
     return `${id}:information`;
   }
-  public async findOneById(id: number) {
+  public async findOneById(id: number): Promise<User> {
     let userFound: User | null = null;
     try {
       userFound = await this.userRepository.findOne({

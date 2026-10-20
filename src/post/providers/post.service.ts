@@ -12,18 +12,25 @@ import { Post } from '../post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TagService } from '../../tag/providers/tag.service';
 import { QueryPostDto } from '../dtos/query-post.dto';
+import { PaginationService } from '../../pagination/providers/pagination.service';
+import { User } from '../../user/user.entity';
+import { PaginateInterface } from '../../pagination/interfaces/paginate.interface';
 @Injectable()
 export class PostService {
   private logger: Logger;
   constructor(
     private readonly userService: UserService,
     private readonly tagService: TagService,
+    private readonly paginateService: PaginationService,
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
   ) {
     this.logger = new Logger('PostService');
   }
-  public async findAll(userId: number | undefined,query:QueryPostDto) {
+  public async findAll(
+    userId: number | undefined,
+    query: QueryPostDto,
+  ): Promise<User | PaginateInterface<Post>> {
     if (userId) {
       const author = await this.userService.findOneById(userId);
       if (!author) {
@@ -33,22 +40,11 @@ export class PostService {
       }
       return author;
     }
-    let skip=0;
-    if(query&&query.page&&query.limit
-    ){
-   skip=(query?.page-1)*query?.limit
-    }
 
-    
-    return await this.postRepository.find({
-      relations: {
-        author: true,
-        tags: true,
-      },
-      take:query.limit,
-      skip:skip
-
-    });
+    return this.paginateService.paginateQuery(
+      { page: query.page, limit: query.limit },
+      this.postRepository,
+    );
   }
   public async createPost(body: CreatePostDto) {
     try {

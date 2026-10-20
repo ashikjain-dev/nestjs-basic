@@ -38,10 +38,10 @@ export class PostController {
   public getPosts(
     @Param('userId', new ParseIntPipe({ optional: true }))
     userId: number | undefined,
-    @Query()query:QueryPostDto
+    @Query() query: QueryPostDto,
   ) {
-    this.logger.log(query)
-    return this.postService.findAll(userId,query);
+    this.logger.log(query);
+    return this.postService.findAll(userId, query);
   }
   @ApiOperation({
     summary: 'create a new post',
