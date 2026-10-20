@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { Post } from '../post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TagService } from '../../tag/providers/tag.service';
+import { QueryPostDto } from '../dtos/query-post.dto';
 @Injectable()
 export class PostService {
   private logger: Logger;
@@ -22,7 +23,7 @@ export class PostService {
   ) {
     this.logger = new Logger('PostService');
   }
-  public async findAll(userId: number | undefined) {
+  public async findAll(userId: number | undefined,query:QueryPostDto) {
     if (userId) {
       const author = await this.userService.findOneById(userId);
       if (!author) {
@@ -32,11 +33,21 @@ export class PostService {
       }
       return author;
     }
+    let skip=0;
+    if(query&&query.page&&query.limit
+    ){
+   skip=(query?.page-1)*query?.limit
+    }
+
+    
     return await this.postRepository.find({
       relations: {
         author: true,
         tags: true,
       },
+      take:query.limit,
+      skip:skip
+
     });
   }
   public async createPost(body: CreatePostDto) {

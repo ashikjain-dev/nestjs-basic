@@ -8,10 +8,12 @@ import {
   Logger,
   Delete,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { PostService } from './providers/post.service';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { CreatePostDto } from './dtos/create-post.dto';
+import { QueryPostDto } from './dtos/query-post.dto';
 
 @Controller('post')
 export class PostController {
@@ -36,8 +38,10 @@ export class PostController {
   public getPosts(
     @Param('userId', new ParseIntPipe({ optional: true }))
     userId: number | undefined,
+    @Query()query:QueryPostDto
   ) {
-    return this.postService.findAll(userId);
+    this.logger.log(query)
+    return this.postService.findAll(userId,query);
   }
   @ApiOperation({
     summary: 'create a new post',
