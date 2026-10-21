@@ -7,7 +7,11 @@ import { User } from './user.entity';
 import { PaginationModule } from '../pagination/pagination.module';
 
 @Module({
-  imports: [forwardRef(() => AuthModule),PaginationModule, TypeOrmModule.forFeature([User])],
+  imports: [
+    forwardRef(() => AuthModule),
+    PaginationModule,
+    TypeOrmModule.forFeature([User]),
+  ],
   controllers: [UserController],
   providers: [UserService, Logger],
   exports: [UserService],

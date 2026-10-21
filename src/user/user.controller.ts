@@ -8,6 +8,8 @@ import {
   Post,
   Body,
   Logger,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -15,6 +17,7 @@ import { UserService } from './providers/user.service';
 import { CreateManyUserDto } from './dtos/create-many-user.dto';
 import { PaginateInterface } from '../pagination/interfaces/paginate.interface';
 import { User } from './user.entity';
+import { LoginUserDto } from './dtos/login-user.dto';
 @Controller('user')
 export class UserController {
   constructor(
@@ -49,7 +52,7 @@ export class UserController {
     page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
     limit: number,
-  ):Promise<User|PaginateInterface<User>> {
+  ): Promise<User | PaginateInterface<User>> {
     this.logger.log(
       `userid:${id} | page:${page} | limit:${limit}`,
       'UserController',
@@ -70,5 +73,13 @@ export class UserController {
   @Post('/many/users')
   public creatManyUsers(@Body() body: CreateManyUserDto) {
     return this.userService.createMany(body);
+  }
+  @ApiOperation({
+    summary: 'login to an user account',
+  })
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  public async loginUser(@Body() body: LoginUserDto) {
+    return this.userService.login(body);
   }
 }

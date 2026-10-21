@@ -9,6 +9,7 @@ import {
   Logger,
   NotFoundException,
   RequestTimeoutException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from '../../auth/providers/auth.service';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
@@ -18,6 +19,8 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { CreateManyUserDto } from '../dtos/create-many-user.dto';
 import { PaginationService } from '../../pagination/providers/pagination.service';
 import { PaginateInterface } from '../../pagination/interfaces/paginate.interface';
+import { HashService } from '../../auth/providers/hash.service';
+import { LoginUserDto } from '../dtos/login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -25,17 +28,26 @@ export class UserService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
-    private readonly paginateService:PaginationService,
+    @Inject(forwardRef(() => HashService))
+    private readonly hashService: HashService,
+    private readonly paginateService: PaginationService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
     private readonly logger: Logger,
   ) {}
-  public findAll(id: number | undefined, page: number, limit: number): Promise<User|PaginateInterface<User>> {
+  public findAll(
+    id: number | undefined,
+    page: number,
+    limit: number,
+  ): Promise<User | PaginateInterface<User>> {
     if (id !== undefined) {
-      return this.findOneById(id)
+      return this.findOneById(id);
     }
 
-    return this.paginateService.paginateQuery({page,limit},this.userRepository);
+    return this.paginateService.paginateQuery(
+      { page, limit },
+      this.userRepository,
+    );
   }
   public async findOneById(id: number): Promise<User> {
     let userFound: User | null = null;
@@ -70,6 +82,9 @@ export class UserService {
           `User already exist:${existinUser.email}`,
         );
       } else {
+        createUserdto.password = await this.hashService.hashPassword(
+          createUserdto.password,
+        );
         let newUser = this.userRepository.create(createUserdto);
         newUser = await this.userRepository.save(newUser);
         return newUser;
@@ -108,6 +123,36 @@ export class UserService {
       throw new InternalServerErrorException(error);
     } finally {
       await queryRunner?.release();
+    }
+  }
+  public async login(body: LoginUserDto) {
+    try {
+      const existingUserFound = await this.userRepository.findOne({
+        where: { email: body.email },
+      });
+      if (!existingUserFound) {
+        throw new NotFoundException(`your email is not found in our system`);
+      }
+      if (
+        await this.hashService.comparePassword(
+          body.password,
+          existingUserFound.password,
+        )
+      ) {
+        return `you are logged in to your account`;
+      } else {
+        throw new UnauthorizedException('User email or password is incorrect');
+      }
+    } catch (error) {
+      this.logger.log(
+        `error while signing in to an user account:${body.email}`,
+      );
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        `Not able to verify your account, please try again later`,
+      );
     }
   }
 }

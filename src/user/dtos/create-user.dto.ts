@@ -49,7 +49,8 @@ export class CreateUserDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MaxLength(35)
+  @MinLength(8)
+  @MaxLength(72)
   @IsStrongPassword(
     {
       minLength: 10,
