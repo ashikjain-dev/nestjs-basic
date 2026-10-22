@@ -11,7 +11,7 @@ import {
   RequestTimeoutException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from '../../auth/providers/auth.service';
+import * as config from '@nestjs/config'
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,6 +21,8 @@ import { PaginationService } from '../../pagination/providers/pagination.service
 import { PaginateInterface } from '../../pagination/interfaces/paginate.interface';
 import { HashService } from '../../auth/providers/hash.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
+import { jwtConfig } from '../../auth/config/jwt.config';
+import { AuthService } from '../../auth/providers/auth.service';
 
 @Injectable()
 export class UserService {
@@ -34,6 +36,7 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
     private readonly logger: Logger,
+   @Inject(jwtConfig.KEY)private readonly jwtConfiguration:config.ConfigType<typeof jwtConfig>
   ) {}
   public findAll(
     id: number | undefined,
@@ -87,7 +90,7 @@ export class UserService {
         );
         let newUser = this.userRepository.create(createUserdto);
         newUser = await this.userRepository.save(newUser);
-        return newUser;
+       return this.generateToken(newUser)
       }
     } catch (error) {
       this.logger.error(`Error while creating a ${error}`);
@@ -139,7 +142,7 @@ export class UserService {
           existingUserFound.password,
         )
       ) {
-        return `you are logged in to your account`;
+        return this.generateToken(existingUserFound)
       } else {
         throw new UnauthorizedException('User email or password is incorrect');
       }
@@ -155,4 +158,13 @@ export class UserService {
       );
     }
   }
+  public async generateToken(user:User){
+     const token=await this.authService.generateToken(user)
+        return {
+          token,
+          type:"Bearer",
+          expiresIn:this.jwtConfiguration.signOptions.expiresIn
+        }
+  }
+
 }

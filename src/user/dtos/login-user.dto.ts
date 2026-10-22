@@ -26,8 +26,6 @@ export class LoginUserDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(72)
   @IsStrongPassword(
     {
       minLength: 10,
