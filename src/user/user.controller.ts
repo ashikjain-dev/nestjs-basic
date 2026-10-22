@@ -10,6 +10,7 @@ import {
   Logger,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -18,6 +19,7 @@ import { CreateManyUserDto } from './dtos/create-many-user.dto';
 import { PaginateInterface } from '../pagination/interfaces/paginate.interface';
 import { User } from './user.entity';
 import { LoginUserDto } from './dtos/login-user.dto';
+import { AuthTokenGuard } from '../auth/auth-guard/auth-token.guard';
 @Controller('user')
 export class UserController {
   constructor(
@@ -70,6 +72,7 @@ export class UserController {
   @ApiOperation({
     summary: 'create multiple users at once',
   })
+  @UseGuards(AuthTokenGuard)
   @Post('/many/users')
   public creatManyUsers(@Body() body: CreateManyUserDto) {
     return this.userService.createMany(body);

@@ -7,13 +7,15 @@ import { User } from './user.entity';
 import { PaginationModule } from '../pagination/pagination.module';
 import { ConfigModule } from '@nestjs/config';
 import { jwtConfig } from '../auth/config/jwt.config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     forwardRef(() => AuthModule),
     PaginationModule,
     TypeOrmModule.forFeature([User]),
-    ConfigModule.forFeature(jwtConfig)
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider())
   ],
   controllers: [UserController],
   providers: [UserService, Logger],

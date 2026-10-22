@@ -13,6 +13,10 @@ import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/tag.entity';
 
 import Joi from './config/environment.validation';
+import { jwtConfig } from './auth/config/jwt.config';
+import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthTokenGuard } from './auth/auth-guard/auth-token.guard';
 @Module({
   imports: [
     UserModule,
@@ -45,9 +49,11 @@ import Joi from './config/environment.validation';
         };
       },
     }),
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider())
   ],
   controllers: [AppController],
-  providers: [AppService, Logger],
+  providers: [AppService, Logger,{provide:APP_GUARD,useClass:AuthTokenGuard}],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
