@@ -16,7 +16,9 @@ import Joi from './config/environment.validation';
 import { jwtConfig } from './auth/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthTokenGuard } from './auth/auth-guard/auth-token.guard';
+import { AuthTokenGuard } from './auth/guards/auth-guard/auth-token.guard';
+import { NoauthGuard } from './auth/guards/noauth/noauth.guard';
+import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 @Module({
   imports: [
     UserModule,
@@ -50,10 +52,16 @@ import { AuthTokenGuard } from './auth/auth-guard/auth-token.guard';
       },
     }),
     ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider())
+    JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [AppController],
-  providers: [AppService, Logger,{provide:APP_GUARD,useClass:AuthTokenGuard}],
+  providers: [
+    AppService,
+    Logger,
+    { provide: APP_GUARD, useClass: AuthenticationGuard },
+    AuthTokenGuard,
+    NoauthGuard,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

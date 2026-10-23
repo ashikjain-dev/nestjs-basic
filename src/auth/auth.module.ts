@@ -21,7 +21,7 @@ import { JWTService } from './providers/jwt.service';
     { provide: HashService, useClass: BcryptService },
     BcryptService,
     CryptoService,
-    JWTService
+    JWTService,
   ],
   exports: [AuthService, { provide: HashService, useClass: BcryptService }],
 })

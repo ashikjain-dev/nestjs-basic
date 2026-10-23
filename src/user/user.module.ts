@@ -15,7 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
     PaginationModule,
     TypeOrmModule.forFeature([User]),
     ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider())
+    JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [UserController],
   providers: [UserService, Logger],

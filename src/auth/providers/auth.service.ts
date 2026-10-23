@@ -12,7 +12,7 @@ export class AuthService {
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly hashService: BcryptService,
-    private readonly jwtService:JWTService
+    private readonly jwtService: JWTService,
   ) {
     this.logger = new Logger('AuthService');
   }
@@ -25,7 +25,7 @@ export class AuthService {
   ): Promise<boolean> {
     return this.hashService.comparePassword(text, encryptedPassword);
   }
-  public async generateToken(user:User){
+  public async generateToken(user: User) {
     return this.jwtService.generateToken(user);
   }
 }

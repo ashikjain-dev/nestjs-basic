@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  SetMetadata,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -19,7 +20,9 @@ import { CreateManyUserDto } from './dtos/create-many-user.dto';
 import { PaginateInterface } from '../pagination/interfaces/paginate.interface';
 import { User } from './user.entity';
 import { LoginUserDto } from './dtos/login-user.dto';
-import { AuthTokenGuard } from '../auth/auth-guard/auth-token.guard';
+import { AuthTokenGuard } from '../auth/guards/auth-guard/auth-token.guard';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { AuthEnum } from '../auth/enums/auth.enum';
 @Controller('user')
 export class UserController {
   constructor(
@@ -66,6 +69,7 @@ export class UserController {
     summary: 'Create an user',
   })
   @Post()
+  @Auth(AuthEnum.NONE)
   public createUser(@Body() body: CreateUserDto) {
     return this.userService.createUser(body);
   }
@@ -82,6 +86,7 @@ export class UserController {
   })
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @Auth(AuthEnum.NONE)
   public async loginUser(@Body() body: LoginUserDto) {
     return this.userService.login(body);
   }
