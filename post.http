@@ -1,0 +1,24 @@
+curl -X 'POST' \
+  'http://localhost:3000/post' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImVtYWlsIjoiQW1hbkBraGFuLmNvbSIsImlhdCI6MTc5Mjc1MzAyNCwiZXhwIjoxNzkyNzU2NjI0fQ.W3G2Yj9O--ExYxogFH2bF3gyFIb8SUsoy9e4BijKeh0' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "title": "My First Blog Post",
+  "postType": "post",
+  "slug": "my-first-blog-post",
+  "status": "draft",
+  "content": "This is the main body content of the post...",
+  "featuredImageUrl": "https://example.com/image.jpg",
+  "publishOn": "2026-06-01T10:00:00.000Z",
+  "tags": [
+    1,
+    2,
+    3
+  ],
+  "metaOptions": {
+    "key": "theme",
+    "value": "dark"
+  },
+  "authorId": 12
+}'

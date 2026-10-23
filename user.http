@@ -1,0 +1,13 @@
+### Login to the user account
+
+POST  http://localhost:3000/user/login
+content-type: application/json
+accept: application/json
+User-Agent: rest-client
+
+{
+  "email": "Aman@khan.com",
+  "password": "Aman@khan@123"
+}
+
+
