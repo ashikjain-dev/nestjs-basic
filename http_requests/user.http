@@ -1,9 +1,12 @@
 ### Login to the user account
+@userAgent = "httpYac"
+
+
 
 POST  http://localhost:3000/user/login
 content-type: application/json
 accept: application/json
-User-Agent: rest-client
+User-Agent: {{userAgent}}
 
 {
   "email": "Aman@khan.com",
@@ -11,3 +14,7 @@ User-Agent: rest-client
 }
 
 
+GET http://localhost:3000/health
+content-type: application/json
+accept: application/json
+User-Agent: {{userAgent}}
