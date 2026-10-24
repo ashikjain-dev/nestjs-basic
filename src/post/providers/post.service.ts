@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -67,6 +68,9 @@ export class PostService {
       return newPost;
     } catch (error) {
       this.logger.error(`error while creating a post:${error}`);
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new InternalServerErrorException(`Error while creating a post`);
     }
   }

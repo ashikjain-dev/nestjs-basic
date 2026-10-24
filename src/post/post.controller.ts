@@ -11,14 +11,22 @@ import {
   Query,
 } from '@nestjs/common';
 import { PostService } from './providers/post.service';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiHeader,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { QueryPostDto } from './dtos/query-post.dto';
+import { ActiveUser } from '../auth/decorators/active-user.decorator';
+import type { ActiveUserInterface } from '../auth/interfaces/active-user.interface';
+import { CreatePostService } from './providers/create-post.service';
 
 @Controller('post')
 export class PostController {
   private logger: Logger;
-  constructor(private readonly postService: PostService) {
+  constructor(private readonly postService: PostService,private readonly createPostService:CreatePostService) {
     this.logger = new Logger('PostController');
   }
   @Get('{/:userId}')
@@ -50,10 +58,17 @@ export class PostController {
     status: 201,
     description: 'post create successfully',
   })
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    example:
+      'Bearer '  })
   @Post()
-  public createPost(@Body() body: CreatePostDto) {
-    this.logger.log(body);
-    return this.postService.createPost(body);
+  public createPost(
+    @Body() body: CreatePostDto,
+    @ActiveUser() activeUser: ActiveUserInterface,
+  ) {
+    return this.createPostService.CreatePost(body,activeUser)
   }
   @Delete('{/:id}')
   @HttpCode(200)

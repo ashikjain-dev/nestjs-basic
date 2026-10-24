@@ -3,6 +3,7 @@ import * as config from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConfig } from '../config/jwt.config';
 import { User } from '../../user/user.entity';
+import { ActiveUserInterface } from '../interfaces/active-user.interface';
 export class JWTService {
   private readonly logger: Logger;
   constructor(
@@ -15,7 +16,7 @@ export class JWTService {
   public async generateToken(user: User) {
     try {
       const token = this.jwtService.signAsync(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.email } as ActiveUserInterface,
         {
           secret: this.jwtConfiguration.secret,
           expiresIn: this.jwtConfiguration.signOptions.expiresIn,
