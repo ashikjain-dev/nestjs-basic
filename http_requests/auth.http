@@ -1,0 +1,10 @@
+### Get a refresh token and access token by using a issued valid token
+
+POST http://localhost:3000/auth/refresh
+content-type: application/json
+accept: application/json
+User-Agent: rest-client
+
+{
+    "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTc5Mjg2MTc3OSwiZXhwIjoxNzkyOTQ4MTc5fQ.11CKNBdTrF3Earpi85uhLElV96kEWUtwXqYTYsDDflQ"
+}

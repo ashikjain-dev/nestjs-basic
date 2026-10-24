@@ -26,7 +26,10 @@ export class CreatePostService {
     this.logger = new Logger('PostService');
   }
 
-  public async CreatePost(body: CreatePostDto,activeUser:ActiveUserInterface) {
+  public async CreatePost(
+    body: CreatePostDto,
+    activeUser: ActiveUserInterface,
+  ) {
     try {
       const [user, tags] = await Promise.all([
         this.userService.findOneById(activeUser.id),
@@ -50,23 +53,29 @@ export class CreatePostService {
         throw error;
       }
       if (error instanceof QueryFailedError) {
-      const dbError = error as any;
+        const dbError = error as any;
 
-      // Unique constraint violation (e.g., duplicate slug or title)
-      // Postgres error code: '23505' | MySQL error code: 1062
-      if (dbError.code === '23505' || dbError.errno === 1062) {
-        throw new ConflictException('A post with similar unique details already exists');
+        // Unique constraint violation (e.g., duplicate slug or title)
+        // Postgres error code: '23505' | MySQL error code: 1062
+        if (dbError.code === '23505' || dbError.errno === 1062) {
+          throw new ConflictException(
+            'A post with similar unique details already exists',
+          );
+        }
+
+        // Foreign key constraint failure or invalid column data
+        // Postgres error code: '23503' | MySQL error code: 1452
+        if (dbError.code === '23503' || dbError.errno === 1452) {
+          throw new BadRequestException(
+            'Referenced entity (e.g., user or tag) is invalid or does not exist',
+          );
+        }
+
+        // Other database constraint failures
+        throw new BadRequestException(
+          `Database operation failed: ${dbError.detail || dbError.message}`,
+        );
       }
-
-      // Foreign key constraint failure or invalid column data
-      // Postgres error code: '23503' | MySQL error code: 1452
-      if (dbError.code === '23503' || dbError.errno === 1452) {
-        throw new BadRequestException('Referenced entity (e.g., user or tag) is invalid or does not exist');
-      }
-
-      // Other database constraint failures
-      throw new BadRequestException(`Database operation failed: ${dbError.detail || dbError.message}`);
-    }
       throw new InternalServerErrorException(`Error while creating a post`);
     }
   }

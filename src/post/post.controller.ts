@@ -26,7 +26,10 @@ import { CreatePostService } from './providers/create-post.service';
 @Controller('post')
 export class PostController {
   private logger: Logger;
-  constructor(private readonly postService: PostService,private readonly createPostService:CreatePostService) {
+  constructor(
+    private readonly postService: PostService,
+    private readonly createPostService: CreatePostService,
+  ) {
     this.logger = new Logger('PostController');
   }
   @Get('{/:userId}')
@@ -61,14 +64,14 @@ export class PostController {
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
-    example:
-      'Bearer '  })
+    example: 'Bearer ',
+  })
   @Post()
   public createPost(
     @Body() body: CreatePostDto,
     @ActiveUser() activeUser: ActiveUserInterface,
   ) {
-    return this.createPostService.CreatePost(body,activeUser)
+    return this.createPostService.CreatePost(body, activeUser);
   }
   @Delete('{/:id}')
   @HttpCode(200)

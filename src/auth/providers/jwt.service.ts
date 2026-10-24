@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { jwtConfig } from '../config/jwt.config';
 import { User } from '../../user/user.entity';
 import { ActiveUserInterface } from '../interfaces/active-user.interface';
+import { TOKEN_TYPE } from '../constant/constant';
 export class JWTService {
   private readonly logger: Logger;
   constructor(
@@ -30,10 +31,21 @@ export class JWTService {
   }
   public async verifyToken(payload: string) {
     try {
-      const verify = this.jwtService.verify(payload);
+      const verify = await this.jwtService.verifyAsync(payload,{secret:this.jwtConfiguration.secret});
+      return verify
     } catch (error) {
       this.logger.error(`error while verifying jwt token:${error}`);
       throw new InternalServerErrorException(`Error while verifying a token`);
     }
+  }
+
+  public async signToken<T>(userId: number, expiresIn: number, payload?: T) {
+    return this.jwtService.signAsync(
+      { id: userId, ...payload },
+      {
+        secret: this.jwtConfiguration.secret,
+        expiresIn,
+      },
+    );
   }
 }

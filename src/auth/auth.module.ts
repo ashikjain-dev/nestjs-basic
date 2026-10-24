@@ -9,6 +9,7 @@ import { BcryptService } from './providers/bcrypt.service';
 import { CryptoService } from './providers/crypto.service';
 import { jwtConfig } from './config/jwt.config';
 import { JWTService } from './providers/jwt.service';
+import { RefreshTokenServiceTs } from './providers/refresh-token.service';
 @Module({
   imports: [
     forwardRef(() => UserModule),
@@ -22,6 +23,7 @@ import { JWTService } from './providers/jwt.service';
     BcryptService,
     CryptoService,
     JWTService,
+    RefreshTokenServiceTs,
   ],
   exports: [AuthService, { provide: HashService, useClass: BcryptService }],
 })

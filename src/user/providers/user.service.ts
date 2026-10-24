@@ -21,7 +21,6 @@ import { PaginationService } from '../../pagination/providers/pagination.service
 import { PaginateInterface } from '../../pagination/interfaces/paginate.interface';
 import { HashService } from '../../auth/providers/hash.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
-import { jwtConfig } from '../../auth/config/jwt.config';
 import { AuthService } from '../../auth/providers/auth.service';
 
 @Injectable()
@@ -36,8 +35,6 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
     private readonly logger: Logger,
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: config.ConfigType<typeof jwtConfig>,
   ) {}
   public findAll(
     id: number | undefined,
@@ -160,11 +157,6 @@ export class UserService {
     }
   }
   public async generateToken(user: User) {
-    const token = await this.authService.generateToken(user);
-    return {
-      token,
-      type: 'Bearer',
-      expiresIn: this.jwtConfiguration.signOptions.expiresIn,
-    };
+    return await this.authService.generateAccessAndRefreshTokens(user);
   }
 }
