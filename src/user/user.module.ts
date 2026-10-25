@@ -1,4 +1,4 @@
-import { Logger, Module, forwardRef } from '@nestjs/common';
+import { forwardRef, Logger, Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './providers/user.service';
 import { AuthModule } from '../auth/auth.module';
@@ -11,11 +11,11 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    forwardRef(() => AuthModule),
     PaginationModule,
     TypeOrmModule.forFeature([User]),
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
+    forwardRef(() => AuthModule),
   ],
   controllers: [UserController],
   providers: [UserService, Logger],

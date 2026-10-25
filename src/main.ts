@@ -8,6 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({ prefix: 'intro' }),
   });
+  app.enableCors({
+    methods: ['POST'],
+    origin: process.env.ALLOWED_ORIGIN || 'http://localhost:3005',
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

@@ -43,7 +43,7 @@ export class CreateUserDto {
   email!: string;
   @ApiProperty({
     type: 'string',
-    required: true,
+    required: false,
     description: 'Password of an user',
     example: 'Aman@khan@123',
   })
@@ -64,5 +64,5 @@ export class CreateUserDto {
         'Password must be at least 10 characters long and contain 2 numbers.',
     },
   )
-  password!: string;
+  password?: string;
 }

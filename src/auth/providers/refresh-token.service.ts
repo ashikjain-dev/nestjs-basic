@@ -14,16 +14,16 @@ export class RefreshTokenServiceTs {
   private readonly logger!: Logger;
   constructor(
     private readonly jwtService: JWTService,
-    private readonly userService:UserService,
-    private readonly authService:AuthService
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
   ) {
     this.logger = new Logger('RefreshTokenService');
   }
   public async getRefreshToken(token: RefreshTokenDto) {
     try {
       const payload = await this.jwtService.verifyToken(token.refreshToken);
-      const user=await this.userService.findOneById(payload.id)
-      return  this.authService.generateAccessAndRefreshTokens(user)
+      const user = await this.userService.findOneById(payload.id);
+      return this.authService.generateAccessAndRefreshTokens(user);
     } catch (error) {
       this.logger.error(
         `error while generating tokens:${JSON.stringify(error)}`,

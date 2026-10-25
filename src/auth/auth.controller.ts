@@ -22,7 +22,7 @@ export class AuthController {
     this.logger = new Logger('AuthController');
   }
   @ApiOperation({
-    summary:'get both refresh and access token by using a valid token.'
+    summary: 'get both refresh and access token by using a valid token.',
   })
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)

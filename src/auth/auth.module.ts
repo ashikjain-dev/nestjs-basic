@@ -1,5 +1,5 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { ConfigModule, ConfigService, ConfigType } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './providers/auth.service';
@@ -10,13 +10,16 @@ import { CryptoService } from './providers/crypto.service';
 import { jwtConfig } from './config/jwt.config';
 import { JWTService } from './providers/jwt.service';
 import { RefreshTokenServiceTs } from './providers/refresh-token.service';
+import { GoogleAuthController } from './controllers/google-auth.controller';
+import { GoogleAuthService } from './providers/google-auth.service';
+
 @Module({
   imports: [
-    forwardRef(() => UserModule),
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
+    forwardRef(() => UserModule),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, GoogleAuthController],
   providers: [
     AuthService,
     { provide: HashService, useClass: BcryptService },
@@ -24,6 +27,7 @@ import { RefreshTokenServiceTs } from './providers/refresh-token.service';
     CryptoService,
     JWTService,
     RefreshTokenServiceTs,
+    GoogleAuthService,
   ],
   exports: [AuthService, { provide: HashService, useClass: BcryptService }],
 })

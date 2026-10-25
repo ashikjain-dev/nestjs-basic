@@ -27,15 +27,19 @@ import { AuthService } from '../../auth/providers/auth.service';
 export class UserService {
   private logName = 'UserService';
   constructor(
+    private readonly paginateService: PaginationService,
+    private readonly dataSource: DataSource,
+    private readonly logger: Logger,
+
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
     @Inject(forwardRef(() => HashService))
     private readonly hashService: HashService,
-    private readonly paginateService: PaginationService,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private readonly dataSource: DataSource,
-    private readonly logger: Logger,
-  ) {}
+  ) {
+    this.logger = new Logger(this.logName);
+  }
   public findAll(
     id: number | undefined,
     page: number,
@@ -84,7 +88,7 @@ export class UserService {
         );
       } else {
         createUserdto.password = await this.hashService.hashPassword(
-          createUserdto.password,
+          createUserdto.password ?? '',
         );
         let newUser = this.userRepository.create(createUserdto);
         newUser = await this.userRepository.save(newUser);
@@ -137,7 +141,7 @@ export class UserService {
       if (
         await this.hashService.comparePassword(
           body.password,
-          existingUserFound.password,
+          existingUserFound.password ?? '',
         )
       ) {
         return this.generateToken(existingUserFound);
@@ -158,5 +162,24 @@ export class UserService {
   }
   public async generateToken(user: User) {
     return await this.authService.generateAccessAndRefreshTokens(user);
+  }
+
+  public async findOneByGoogleId(googleId: string): Promise<User | undefined> {
+    let userFound: User | null = null;
+    try {
+      userFound = await this.userRepository.findOne({
+        where: { googleId },
+      });
+    } catch (error) {
+      this.logger.error(`Not able to fetch the user detail:${error}`);
+      throw new RequestTimeoutException(
+        `Not able to fetch the user detail at the moment`,
+      );
+    }
+    if (userFound) {
+      return userFound;
+    }
+    this.logger.log(`No user found for the given google Id:${googleId}`);
+    return undefined;
   }
 }

@@ -31,8 +31,10 @@ export class JWTService {
   }
   public async verifyToken(payload: string) {
     try {
-      const verify = await this.jwtService.verifyAsync(payload,{secret:this.jwtConfiguration.secret});
-      return verify
+      const verify = await this.jwtService.verifyAsync(payload, {
+        secret: this.jwtConfiguration.secret,
+      });
+      return verify;
     } catch (error) {
       this.logger.error(`error while verifying jwt token:${error}`);
       throw new InternalServerErrorException(`Error while verifying a token`);

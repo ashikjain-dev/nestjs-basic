@@ -3,10 +3,10 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class RefreshTokenDto {
   @ApiProperty({
-    type:"string",
-    name:'refreshtoken',
-    description:'A valid token is required',
-    nullable:false
+    type: 'string',
+    name: 'refreshtoken',
+    description: 'A valid token is required',
+    nullable: false,
   })
   @IsNotEmpty()
   @IsString()
