@@ -15,10 +15,11 @@ import { Tag } from './tag/tag.entity';
 import Joi from './config/environment.validation';
 import { jwtConfig } from './auth/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthTokenGuard } from './auth/guards/auth-guard/auth-token.guard';
 import { NoauthGuard } from './auth/guards/noauth/noauth.guard';
 import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
+import { DataresponseInterceptor } from './interceptors/dataresponse.interceptor';
 @Module({
   imports: [
     UserModule,
@@ -59,6 +60,7 @@ import { AuthenticationGuard } from './auth/guards/authentication/authentication
     AppService,
     Logger,
     { provide: APP_GUARD, useClass: AuthenticationGuard },
+    { provide: APP_INTERCEPTOR, useClass: DataresponseInterceptor },
     AuthTokenGuard,
     NoauthGuard,
   ],

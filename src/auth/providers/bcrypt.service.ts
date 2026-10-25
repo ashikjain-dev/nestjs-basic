@@ -16,7 +16,6 @@ export class BcryptService implements HashService {
   public async hashPassword(text: string): Promise<string> {
     try {
       const hashedPassword = await bcrypt.hash(text, this.saltRounds);
-      this.logger.log(`hashed password:${hashedPassword}`);
       return hashedPassword;
     } catch (error) {
       this.logger.log(`error while generating a hashedPassword:${error}`);

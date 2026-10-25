@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Post } from '../post/post.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -37,17 +38,20 @@ export class User {
     length: 60,
     nullable: true,
   })
+  @Exclude()
   password?: string;
 
   @Column({
     type: 'varchar',
     nullable: true,
   })
+  @Exclude()
   googleId?: string;
 
   @OneToOne(() => Post, (post) => post.author)
   post!: Post[];
 
+  @Exclude()
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
   @CreateDateColumn({
@@ -55,5 +59,6 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
+  @Exclude()
   updatedAt!: Date;
 }

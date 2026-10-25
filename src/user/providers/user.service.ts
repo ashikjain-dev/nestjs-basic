@@ -178,13 +178,13 @@ export class UserService {
       );
     }
     if (userFound) {
-      this.logger.log(`User found;${userFound.email}`)
+      this.logger.log(`User found;${userFound.email}`);
       return userFound;
     }
     this.logger.log(`No user found for the given google Id:${googleId}`);
     return undefined;
   }
-  public async createGoogleUser(body:GoogleUserDto){
+  public async createGoogleUser(body: GoogleUserDto) {
     try {
       let existinUser = await this.userRepository.findOne({
         where: { email: body.email },
@@ -198,10 +198,9 @@ export class UserService {
           `User already exist:${existinUser.email}`,
         );
       } else {
-       
-        let newUser= this.userRepository.create(body);
-        newUser  = await this.userRepository.save(newUser);
-        
+        let newUser = this.userRepository.create(body);
+        newUser = await this.userRepository.save(newUser);
+
         return this.generateToken(newUser);
       }
     } catch (error) {

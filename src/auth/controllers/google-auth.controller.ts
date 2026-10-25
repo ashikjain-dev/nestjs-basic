@@ -23,7 +23,6 @@ export class GoogleAuthController {
     summary: 'verify user by using google auth token',
   })
   @Post()
-  
   @HttpCode(HttpStatus.OK)
   public async verifyGoogleAuth(@Body() body: GoogleTokenDto) {
     return this.googleAuthService.googleAuthenticateService(body);

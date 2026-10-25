@@ -12,6 +12,7 @@ async function bootstrap() {
     methods: ['POST'],
     origin: process.env.ALLOWED_ORIGIN || 'http://localhost:3005',
   });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

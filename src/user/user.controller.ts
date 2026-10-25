@@ -12,6 +12,8 @@ import {
   HttpStatus,
   UseGuards,
   SetMetadata,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -51,6 +53,7 @@ export class UserController {
     description: 'all user informations',
   })
   @Get('{/:id}')
+  @UseInterceptors(ClassSerializerInterceptor)
   public getUser(
     @Param('id', new ParseIntPipe({ optional: true })) id: number | undefined,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe)

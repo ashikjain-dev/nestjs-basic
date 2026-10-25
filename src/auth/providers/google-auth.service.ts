@@ -45,10 +45,10 @@ export class GoogleAuthService {
       }
 
       const { email, name, family_name, sub: googleId } = payload;
-      this.logger.log(`user email:${email}`)
+      this.logger.log(`user email:${email}`);
       const user = await this.userService.findOneByGoogleId(googleId);
       if (user) {
-       return this.authService.generateAccessAndRefreshTokens(user);
+        return this.authService.generateAccessAndRefreshTokens(user);
       } else {
         const firstName = name?.split(' ')[0];
 
@@ -57,7 +57,7 @@ export class GoogleAuthService {
             firstName,
             lastName: family_name,
             email,
-            googleId
+            googleId,
           });
         } else {
           throw new BadRequestException(
@@ -73,6 +73,4 @@ export class GoogleAuthService {
       throw new InternalServerErrorException(`Couldn't verify google token`);
     }
   }
-
-  
 }

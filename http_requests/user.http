@@ -9,7 +9,7 @@ accept: application/json
 User-Agent: {{userAgent}}
 
 {
-  "email": "Aman@khan.com",
+  "email": "amanKhan@gmail.com",
   "password": "Aman@khan@123"
 }
 
@@ -17,7 +17,7 @@ User-Agent: {{userAgent}}
 GET http://localhost:3000/health
 content-type: application/json
 accept: application/json
-User-Agent: {{userAgent}}
+
 
 
 #### Create a new user on the system
@@ -26,9 +26,9 @@ content-type: application/json
 accept: application/json
 
 {
-  "firstName": "Ashik",
-  "lastName": "A Jain",
-  "email": "ashikjain44@gmail.com",
+  "firstName": "Aman",
+  "lastName": "Khan",
+  "email": "amanKhan@gmail.com",
   "password": "Aman@khan@123"
 }
 
@@ -37,8 +37,7 @@ accept: application/json
 GET http://localhost:3000/user/
 content-type: application/json
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImVtYWlsIjoiQW1hbkBraGFuLmNvbSIsImlhdCI6MTc5Mjg4OTE0OCwiZXhwIjoxNzkyODkyNzQ4fQ.tMya4GYiJ2QEzB_w7gEx28tKKlUrj4uWtsL7hRUznKo
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImVtYWlsIjoiYW1hbktoYW5AZ21haWwuY29tIiwiaWF0IjoxNzkyOTIxMTA4LCJleHAiOjE3OTI5MjQ3MDh9.HIAOyvcFGGmTl4BA4Ht20UKN7H9ko1Rie9Au6So8ExY
 
 
 ### Login to the user account using google auth

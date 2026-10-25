@@ -14,4 +14,5 @@ export default Joi.object({
   JWT_SECRET: Joi.string().required(),
   JWT_TOKEN_TTL: Joi.number().required().default(3600),
   JWT_REFRESH_TOKEN_TTL: Joi.number().default(86400),
+  API_VERSION: Joi.string().default('1.0.0'),
 });
