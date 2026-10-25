@@ -18,3 +18,23 @@ GET http://localhost:3000/health
 content-type: application/json
 accept: application/json
 User-Agent: {{userAgent}}
+
+
+#### Create a new user on the system
+POST http://localhost:3000/user/
+content-type: application/json
+accept: application/json
+
+{
+  "firstName": "Ashik",
+  "lastName": "A Jain",
+  "email": "ashikjain44@gmail.com",
+  "password": "Aman@khan@123"
+}
+
+
+### List all the users list on the system
+GET http://localhost:3000/user/
+content-type: application/json
+accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImVtYWlsIjoiQW1hbkBraGFuLmNvbSIsImlhdCI6MTc5Mjg4OTE0OCwiZXhwIjoxNzkyODkyNzQ4fQ.tMya4GYiJ2QEzB_w7gEx28tKKlUrj4uWtsL7hRUznKo
