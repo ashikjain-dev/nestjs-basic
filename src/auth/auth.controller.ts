@@ -7,7 +7,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './providers/auth.service';
-import { RefreshTokenServiceTs } from './providers/refresh-token.service';
+import { RefreshTokenService } from './providers/refresh-token.service';
 import { RefreshTokenDto } from '../user/dtos/refresh-token.dto';
 import { Auth } from './decorators/auth.decorator';
 import { AuthEnum } from './enums/auth.enum';
@@ -17,7 +17,7 @@ export class AuthController {
   private readonly logger!: Logger;
   constructor(
     private readonly authService: AuthService,
-    private readonly refreshTokenService: RefreshTokenServiceTs,
+    private readonly refreshTokenService: RefreshTokenService,
   ) {
     this.logger = new Logger('AuthController');
   }

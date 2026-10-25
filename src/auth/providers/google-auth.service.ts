@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   Inject,
   Injectable,
@@ -14,7 +15,7 @@ import { UserService } from '../../user/providers/user.service';
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class GoogleAuthService implements OnModuleInit {
+export class GoogleAuthService {
   private readonly logger: Logger;
   private oAuthClient!: OAuth2Client;
   constructor(
@@ -24,28 +25,45 @@ export class GoogleAuthService implements OnModuleInit {
     private readonly authService: AuthService,
   ) {
     this.logger = new Logger('GoogleAuthService');
-  }
-  public async onModuleInit() {
     const clientId = this.jwtConfiguration.googleAuthClientId;
     const clientSecret = this.jwtConfiguration.googleAuthClientSecret;
     this.oAuthClient = new OAuth2Client(clientId, clientSecret);
   }
+  // public async onModuleInit() {
+  //   const clientId = this.jwtConfiguration.googleAuthClientId;
+  //   const clientSecret = this.jwtConfiguration.googleAuthClientSecret;
+  //   this.oAuthClient = new OAuth2Client(clientId, clientSecret);
+  // }
   public async googleAuthenticateService(googleToken: GoogleTokenDto) {
     try {
       const loginTicket = await this.oAuthClient.verifyIdToken({
         idToken: googleToken.loginTicket,
       });
-      this.logger.log(loginTicket);
       const payload = loginTicket.getPayload();
       if (!payload) {
         throw new Error(`Invalid Google token`);
       }
 
-      const { email, sub: googleId } = payload;
+      const { email, name, family_name, sub: googleId } = payload;
+      this.logger.log(`user email:${email}`)
       const user = await this.userService.findOneByGoogleId(googleId);
       if (user) {
-        this.authService.generateAccessAndRefreshTokens(user);
+       return this.authService.generateAccessAndRefreshTokens(user);
       } else {
+        const firstName = name?.split(' ')[0];
+
+        if (firstName && email) {
+          return this.userService.createGoogleUser({
+            firstName,
+            lastName: family_name,
+            email,
+            googleId
+          });
+        } else {
+          throw new BadRequestException(
+            `Couldn't able to fetch your name and email from the google account`,
+          );
+        }
       }
     } catch (error) {
       this.logger.error(error);
@@ -55,4 +73,6 @@ export class GoogleAuthService implements OnModuleInit {
       throw new InternalServerErrorException(`Couldn't verify google token`);
     }
   }
+
+  
 }

@@ -10,7 +10,7 @@ import { UserService } from '../../user/providers/user.service';
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class RefreshTokenServiceTs {
+export class RefreshTokenService {
   private readonly logger!: Logger;
   constructor(
     private readonly jwtService: JWTService,

@@ -22,6 +22,7 @@ import { PaginateInterface } from '../../pagination/interfaces/paginate.interfac
 import { HashService } from '../../auth/providers/hash.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { AuthService } from '../../auth/providers/auth.service';
+import { GoogleUserDto } from '../dtos/google-user.dto';
 
 @Injectable()
 export class UserService {
@@ -177,9 +178,40 @@ export class UserService {
       );
     }
     if (userFound) {
+      this.logger.log(`User found;${userFound.email}`)
       return userFound;
     }
     this.logger.log(`No user found for the given google Id:${googleId}`);
     return undefined;
+  }
+  public async createGoogleUser(body:GoogleUserDto){
+    try {
+      let existinUser = await this.userRepository.findOne({
+        where: { email: body.email },
+      });
+      if (existinUser) {
+        this.logger.log(
+          `User found with the email :${body.email}`,
+          this.logName,
+        );
+        throw new BadRequestException(
+          `User already exist:${existinUser.email}`,
+        );
+      } else {
+       
+        let newUser= this.userRepository.create(body);
+        newUser  = await this.userRepository.save(newUser);
+        
+        return this.generateToken(newUser);
+      }
+    } catch (error) {
+      this.logger.error(`Error while creating a ${error}`);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new RequestTimeoutException(
+        `Unable to process your request at the moment`,
+      );
+    }
   }
 }

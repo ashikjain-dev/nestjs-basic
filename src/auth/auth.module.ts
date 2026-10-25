@@ -9,7 +9,7 @@ import { BcryptService } from './providers/bcrypt.service';
 import { CryptoService } from './providers/crypto.service';
 import { jwtConfig } from './config/jwt.config';
 import { JWTService } from './providers/jwt.service';
-import { RefreshTokenServiceTs } from './providers/refresh-token.service';
+import { RefreshTokenService } from './providers/refresh-token.service';
 import { GoogleAuthController } from './controllers/google-auth.controller';
 import { GoogleAuthService } from './providers/google-auth.service';
 
@@ -26,7 +26,7 @@ import { GoogleAuthService } from './providers/google-auth.service';
     BcryptService,
     CryptoService,
     JWTService,
-    RefreshTokenServiceTs,
+    RefreshTokenService,
     GoogleAuthService,
   ],
   exports: [AuthService, { provide: HashService, useClass: BcryptService }],
