@@ -22,6 +22,7 @@ import { AuthenticationGuard } from './auth/guards/authentication/authentication
 import { DataresponseInterceptor } from './interceptors/dataresponse.interceptor';
 import { AwsUploadEntity } from './awsupload/awsupload.entity';
 import { AwsuploadModule } from './awsupload/awsupload.module';
+import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     UserModule,
@@ -29,6 +30,7 @@ import { AwsuploadModule } from './awsupload/awsupload.module';
     AuthModule,
     TagModule,
     AwsuploadModule,
+    MailModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [

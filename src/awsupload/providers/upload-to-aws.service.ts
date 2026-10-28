@@ -16,14 +16,16 @@ export class UploadToAwsService {
     try {
       const s3 = new S3({
         accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-  secretAccessKey: this.configService.get<string>('AWS_ACCESS_SECRET_KEY'),
-  region: this.configService.get<string>('AWS_S3_BUCKET_REGION'),
-
+        secretAccessKey: this.configService.get<string>(
+          'AWS_ACCESS_SECRET_KEY',
+        ),
+        region: this.configService.get<string>('AWS_S3_BUCKET_REGION'),
       });
-      this.logger.log(`bucketname:${this.configService.get<string>('AWS_PUBLIC_S3_BUCKET_NAME')}`)
+      this.logger.log(
+        `bucketname:${this.configService.get<string>('AWS_PUBLIC_S3_BUCKET_NAME')}`,
+      );
       const uploadResult = await s3
         .upload({
-        
           Bucket:
             this.configService.get<string>('AWS_PUBLIC_S3_BUCKET_NAME') ?? '',
           Body: file.buffer,
@@ -31,7 +33,9 @@ export class UploadToAwsService {
           ContentType: file.mimetype,
         })
         .promise();
-      this.logger.log(`Result from the aws s3 bucket upload:${JSON.stringify(uploadResult)}`);
+      this.logger.log(
+        `Result from the aws s3 bucket upload:${JSON.stringify(uploadResult)}`,
+      );
       return uploadResult;
     } catch (error) {
       this.logger.error(

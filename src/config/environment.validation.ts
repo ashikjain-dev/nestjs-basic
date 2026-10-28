@@ -20,4 +20,7 @@ export default Joi.object({
   AWS_ACCESS_KEY_ID: Joi.string().required(),
   AWS_ACCESS_SECRET_KEY: Joi.string().required(),
   CLDFRONT_DOMAIN: Joi.string().required(),
+  MAIL_HOST: Joi.string().required(),
+  SMTP_USER_NAME: Joi.string().required(),
+  SMTP_USER_PASSWORD: Joi.string().required(),
 });

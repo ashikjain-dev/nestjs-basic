@@ -23,6 +23,7 @@ import { HashService } from '../../auth/providers/hash.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { AuthService } from '../../auth/providers/auth.service';
 import { GoogleUserDto } from '../dtos/google-user.dto';
+import { MailService } from '../../mail/providers/mail.service';
 
 @Injectable()
 export class UserService {
@@ -31,7 +32,7 @@ export class UserService {
     private readonly paginateService: PaginationService,
     private readonly dataSource: DataSource,
     private readonly logger: Logger,
-
+    private readonly mailService: MailService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
 
     @Inject(forwardRef(() => AuthService))
@@ -93,6 +94,9 @@ export class UserService {
         );
         let newUser = this.userRepository.create(createUserdto);
         newUser = await this.userRepository.save(newUser);
+        this.mailService.sendWelcomeEmail(newUser).catch((error) => {
+          this.logger.log(`Error while sending a welcome mail:${error}`);
+        });
         return this.generateToken(newUser);
       }
     } catch (error) {

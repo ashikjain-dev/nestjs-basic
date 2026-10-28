@@ -12,7 +12,7 @@ import { UploadToAwsService } from './upload-to-aws.service';
 import { ActiveUserInterface } from '../../auth/interfaces/active-user.interface';
 import { supportedMiMeTypes } from '../constants/constant';
 import { ConfigService } from '@nestjs/config';
-import {FileTypeEnum} from '../enums/fileType.enum'
+import { FileTypeEnum } from '../enums/fileType.enum';
 @Injectable()
 export class UploadService {
   private logger!: Logger;
@@ -20,7 +20,7 @@ export class UploadService {
     @InjectRepository(AwsUploadEntity)
     private readonly uploadRepository: Repository<AwsUploadEntity>,
     private readonly uploadToAwsService: UploadToAwsService,
-    private readonly configService:ConfigService
+    private readonly configService: ConfigService,
   ) {
     this.logger = new Logger('UploadService');
   }
@@ -44,9 +44,7 @@ export class UploadService {
       newEntry = await this.uploadRepository.save(newEntry);
       return newEntry;
     } catch (error) {
-      this.logger.error(
-        `Error:${JSON.stringify(error)}`,
-      );
+      this.logger.error(`Error:${JSON.stringify(error)}`);
       if (error instanceof HttpException) {
         throw error;
       }
