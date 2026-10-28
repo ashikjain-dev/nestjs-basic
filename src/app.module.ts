@@ -20,12 +20,15 @@ import { AuthTokenGuard } from './auth/guards/auth-guard/auth-token.guard';
 import { NoauthGuard } from './auth/guards/noauth/noauth.guard';
 import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 import { DataresponseInterceptor } from './interceptors/dataresponse.interceptor';
+import { AwsUploadEntity } from './awsupload/awsupload.entity';
+import { AwsuploadModule } from './awsupload/awsupload.module';
 @Module({
   imports: [
     UserModule,
     PostModule,
     AuthModule,
     TagModule,
+    AwsuploadModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [
@@ -48,7 +51,7 @@ import { DataresponseInterceptor } from './interceptors/dataresponse.interceptor
           password: configService.get<string>('DB_PASSWORD'),
           database: configService.get<string>('DB_NAME') ?? 'db',
           synchronize: configService.get<boolean>('DB_SYNCHRONIZE') ?? true,
-          entities: [User, Post, Tag],
+          entities: [User, Post, Tag, AwsUploadEntity],
         };
       },
     }),

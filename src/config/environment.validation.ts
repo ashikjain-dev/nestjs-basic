@@ -15,9 +15,9 @@ export default Joi.object({
   JWT_TOKEN_TTL: Joi.number().required().default(3600),
   JWT_REFRESH_TOKEN_TTL: Joi.number().default(86400),
   API_VERSION: Joi.string().default('1.0.0'),
-  AWS_PUBLIC_S3_BUCKET_NAME:Joi.string().required(),
-  AWS_S3_BUCKET_REGION:Joi.string().required(),
-  AWS_ACCESS_KEY_ID:Joi.string().required(),
-  AWS_ACCESS_SECRET_KEY:Joi.string().required(),
-  CLDFRONT_DOMAIN:Joi.string().required()
+  AWS_PUBLIC_S3_BUCKET_NAME: Joi.string().required(),
+  AWS_S3_BUCKET_REGION: Joi.string().required(),
+  AWS_ACCESS_KEY_ID: Joi.string().required(),
+  AWS_ACCESS_SECRET_KEY: Joi.string().required(),
+  CLDFRONT_DOMAIN: Joi.string().required(),
 });

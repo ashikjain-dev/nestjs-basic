@@ -1,0 +1,16 @@
+### Upload an image
+
+@authToken=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImVtYWlsIjoiYW1hbktoYW5AZ21haWwuY29tIiwiaWF0IjoxNzkzMTUxNDg5LCJleHAiOjE3OTMxNTUwODl9.TH227U-RGyPCl8KxIAzjNz79iZHohKNyAfZT6cn014s
+
+POST http://localhost:3000/awsupload/file
+Authorization: {{authToken}}
+Content-Type: multipart/form-data
+
+file=@./test.png
+
+
+
+
+curl -X POST http://localhost:3000/awsupload/file \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImVtYWlsIjoiYW1hbktoYW5AZ21haWwuY29tIiwiaWF0IjoxNzkzMTUxNDg5LCJleHAiOjE3OTMxNTUwODl9.TH227U-RGyPCl8KxIAzjNz79iZHohKNyAfZT6cn014s" \
+  -F "file=@./test.png;type=image/png" ; echo

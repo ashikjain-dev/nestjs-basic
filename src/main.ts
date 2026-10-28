@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ConsoleLogger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import {config} from 'aws-sdk'
+import { config } from 'aws-sdk';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 
@@ -35,14 +35,15 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  const configService=app.get(ConfigService)
+  const configService = app.get(ConfigService);
   config.update({
-    credentials:{
-      accessKeyId:configService.get<string>("appConfig.awsAccessKeyID")??'',
-      secretAccessKey:configService.get<string>("apConfig.awsAccessSecretKey")??''
+    credentials: {
+      accessKeyId: configService.get<string>('appConfig.awsAccessKeyID') ?? '',
+      secretAccessKey:
+        configService.get<string>('apConfig.awsAccessSecretKey') ?? '',
     },
-    region:configService.get<string>("awsS3BucketRegion")??''
-  })
+    region: configService.get<string>('awsS3BucketRegion') ?? '',
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
