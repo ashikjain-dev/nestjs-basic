@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 describe('AppController', () => {
-  let appController: AppController|undefined=undefined;
+  let appController: AppController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -15,14 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('Controller should be defined"', () => {
-      expect(appController).toBeDefined()
+    it('should return "Hello World!"', () => {
+      expect(appController.getHello()).toBe('Hello World!');
     });
-    it('getHelalth should return object',()=>{
-      expect(appController?.getHealth()).toEqual({
-        message:"service is running",
-        status:'ok'
-      })
-    })
   });
 });
